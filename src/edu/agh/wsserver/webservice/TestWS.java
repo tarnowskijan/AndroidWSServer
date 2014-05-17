@@ -1,7 +1,7 @@
 package edu.agh.wsserver.webservice;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import jdk.javax.jws.WebMethod;
+import jdk.javax.jws.WebService;
 
 @WebService
 public interface TestWS {

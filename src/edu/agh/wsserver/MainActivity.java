@@ -1,9 +1,11 @@
 package edu.agh.wsserver;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
-import javax.xml.ws.Endpoint;
-
+import jdk.javax.xml.ws.Endpoint;
+import jdk.javax.xml.ws.spi.Provider;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
@@ -17,6 +19,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.sun.xml.ws.spi.ProviderImpl;
+import com.sun.xml.ws.transport.httpspi.servlet.EndpointContextImpl;
+
 import edu.agh.wsserver.server.WSServer;
 import edu.agh.wsserver.utils.NetworkUtils;
 import edu.agh.wsserver.webservice.TestWSImpl;
@@ -84,7 +90,22 @@ public class MainActivity extends Activity {
 					stopServerButton.setEnabled(true);
 					startServerButton.setEnabled(false);
 					new GetExternalIPTask((TextView) rootView.findViewById(R.id.ipTextView)).execute();
-					Endpoint.publish("http://localhost:8081/hello/", new TestWSImpl());
+
+//					try {
+//						setFinalStatic(jdk.javax.xml.ws.spi.Provider.class.getField("DEFAULT_JAXWSPROVIDER"), "com.sun.xml.ws.spi.ProviderImpl");
+//					} catch (NoSuchFieldException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					} catch (Exception e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+					ProviderImpl pi = new ProviderImpl();
+					Endpoint endpoint = new ProviderImpl().createEndpoint("http://localhost:8081/hello/", new TestWSImpl());
+					endpoint.setEndpointContext(new EndpointContextImpl());
+					endpoint.publish("http://localhost:8081/hello/");
+//					Endpoint.publish("http://localhost:8081/hello/", new TestWSImpl());
+
 					try {
 						wsServer.start();
 					} catch (IOException e) {
@@ -103,6 +124,16 @@ public class MainActivity extends Activity {
 				wsServer.stop();
 			}
 		}
+	}
+
+	static void setFinalStatic(Field field, Object newValue) throws Exception {
+	      field.setAccessible(true);
+
+	      Field modifiersField = Field.class.getDeclaredField("modifiers");
+	      modifiersField.setAccessible(true);
+	      modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
+	      field.set(null, newValue);
 	}
 
 	public static class GetExternalIPTask extends AsyncTask<Void, Void, String> {

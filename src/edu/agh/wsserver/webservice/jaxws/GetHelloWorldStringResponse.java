@@ -1,10 +1,10 @@
 package edu.agh.wsserver.webservice.jaxws;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import jdk.javax.xml.bind.annotation.XmlAccessType;
+import jdk.javax.xml.bind.annotation.XmlAccessorType;
+import jdk.javax.xml.bind.annotation.XmlElement;
+import jdk.javax.xml.bind.annotation.XmlRootElement;
+import jdk.javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "getHelloWorldStringResponse", namespace = "http://webservice.wsserver.agh.edu/")
 @XmlAccessorType(XmlAccessType.FIELD)
