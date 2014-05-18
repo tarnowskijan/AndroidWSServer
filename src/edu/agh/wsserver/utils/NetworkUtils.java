@@ -1,5 +1,11 @@
 package edu.agh.wsserver.utils;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -33,6 +39,27 @@ public class NetworkUtils {
 	        }
 		} catch (Exception e) {
 			Log.e(LOG_TAG, e.toString());
+		}
+		return "ERROR";
+	}
+
+	/**
+	 * Provides functionality for fetching local ip address
+	 * @return Device local network IP address or ERROR statement.
+	 */
+	public static String getLocalIP() {
+		try {
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+	            NetworkInterface intf = en.nextElement();
+	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+	                InetAddress inetAddress = enumIpAddr.nextElement();
+	                if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+	                    return inetAddress.getHostAddress();
+	                }
+	            }
+	        }
+		} catch (SocketException ex) {
+			Log.e(LOG_TAG, ex.toString());
 		}
 		return "ERROR";
 	}
