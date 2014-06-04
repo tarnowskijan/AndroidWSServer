@@ -17,8 +17,10 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class NetworkUtils {
-	private static final String LOG_TAG = "Utils";
+	private static final String LOG_TAG = "NetworkUtils";
 
+	NetworkUtils(){}
+	
 	/**
 	 * Code adapted from http://stackoverflow.com/a/12854981
 	 * @return Device external IP address or ERROR statement.
